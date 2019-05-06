@@ -1,4 +1,3 @@
-#include <SPI.h>
 #include <Ethernet2.h>
 #include <Servo.h>
 
@@ -18,27 +17,27 @@ int values[] = {0, 0, 3, 3};
 void setup() {
   myservo[0].attach(2, 750, 2250);  // attaches the servo on pin 9 to the servo object
   myservo[0].write(1500);
-  myservo[1].attach(7, 750, 2250);  // attaches the servo on pin 9 to the servo object
+  myservo[1].attach(3, 750, 2250);  // attaches the servo on pin 9 to the servo object
   myservo[1].write(1500);
-  myservo[2].attach(9, 750, 2250);  // attaches the servo on pin 9 to the servo object
-  myservo[2].write(1500);
-  myservo[3].attach(10, 750, 2250);  // attaches the servo on pin 9 to the servo object
-  myservo[3].write(1500);
+  myservo[2].attach(5);  // attaches the servo on pin 9 to the servo object
+  myservo[2].write(90);
+  myservo[3].attach(6);  // attaches the servo on pin 9 to the servo object
+  myservo[3].write(90);
 
   Ethernet.begin(mac, ip);
   server.begin();
 }
 
 void moverPala(int id) {
-  if (movC[id] < 500)
+  if (movC[id] < 100)
     motor(id + 2, dir[id], 1);
-  else if (movC[id] < 1000)
-    motor(id + 2, 0, 0);
-  else
-    motor(id + 2, -1*dir[id], 1);
-  if (movC[id] == 1500) {
-    movC[id] = 0;
+  else if (movC[id] == 100)
+    myservo[id + 2].write(180);
     dir[id] *= -1;
+  else if (movC[id] < 200)
+    motor(id + 2, dir[id], 1);
+  else {
+    movC[id] = 0;
     movPala[id] = false;
     return;
   }
